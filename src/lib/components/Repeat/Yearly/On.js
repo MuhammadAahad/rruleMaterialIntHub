@@ -1,4 +1,10 @@
 import React from 'react';
+import {Grid, makeStyles } from '@material-ui/core';
+import Radio from '@material-ui/core/Radio';
+
+import Typography from '@material-ui/core/Typography';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { range } from 'lodash';
@@ -6,7 +12,47 @@ import { range } from 'lodash';
 import numericalFieldHandler from '../../../utils/numericalFieldHandler';
 import { MONTHS } from '../../../constants/index';
 import translateLabel from '../../../utils/translateLabel';
+const useStyles = makeStyles((theme) => ({
+  inputLabel: {
+      color: theme.palette.text.secondary,
+      width:"auto",
+      height:"auto"
+  },
+  inputContainer: {
+      marginLeft:"10px !important",
+      marginTop: "10px !important",
+      display: "flex",
+      alignItems: "center"
+  },
 
+  selectList: {
+      width: "100%%",
+      height: "50px",
+      color:"#646464 !important",
+      display: "flex !important",
+      border: "1px solid #F0B032 !important",
+      colod:"#546e7a",
+      borderRadius: "50px",
+      padding: "15px !important",
+      background: theme.palette.background.input,
+      justifyContent: "center !important",
+      
+  },
+  list:{
+      backgroundColor:"#2B2A2A !important"
+  },
+  rruleMenuItem:{
+    color:"646464 !important"
+  },
+  radio: {
+    '&$checked': {
+       color: '#F0B032'
+    }
+ },
+ checked: {}
+  
+  
+}));
 const RepeatYearlyOn = ({
   id,
   mode,
@@ -17,58 +63,80 @@ const RepeatYearlyOn = ({
 }) => {
   const daysInMonth = moment(on.month, 'MMM').daysInMonth();
   const isActive = mode === 'on';
-
+  const classes = useStyles();
   return (
-    <div className={`form-group row d-flex align-items-sm-center ${!isActive && 'opacity-50'}`}>
+    <Grid item  direction={'row'} justify={'space-between'}  xl={6} md={6} sm={6} xs={6} lg={6} class="rruleContainer">
+      <Typography className={classes.inputLabel} >
+         On
+        </Typography>
+      <div className={`form-group row d-flex align-items-sm-center  ${!isActive && 'opacity-50'}`} style={{display:"flex"}}>
       <div className="col-sm-1 offset-sm-2">
 
-        {hasMoreModes && (
-          <input
+     
+      {hasMoreModes && (
+          <Radio
             id={id}
             type="radio"
             name="repeat.yearly.mode"
             aria-label="Repeat yearly on"
             value="on"
+            classes={{root: classes.radio, checked: classes.checked}}
             checked={isActive}
             onChange={handleChange}
           />
         )}
-      </div>
-
-      <div className="col-sm-1">
-        {translateLabel(translations, 'repeat.yearly.on')}
+    
+        
       </div>
 
       <div className="col-sm-2">
-        <select
+        <Select
+        MenuProps={{ classes: { list: classes.list },  anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "left"
+        },
+        transformOrigin: {
+          vertical: "top",
+          horizontal: "left"
+        },getContentAnchorEl: null }}
+          className={classes.selectList}
           id={`${id}-month`}
           name="repeat.yearly.on.month"
           aria-label="Repeat yearly on month"
-          className="form-control"
           value={on.month}
           disabled={!isActive}
           onChange={handleChange}
         >
-          {MONTHS.map(month => <option key={month} value={month}>{translateLabel(translations, `months.${month.toLowerCase()}`)}</option>)}
-        </select>
+          {MONTHS.map(month => <MenuItem key={month} value={month}>{translateLabel(translations, `months.${month.toLowerCase()}`)}</MenuItem>)}
+        </Select>
       </div>
 
-      <div className="col-sm-2">
-        <select
+      <div className="col-sm-2" style={{marginLeft:"10px"}}>
+        <Select
+          MenuProps={{ classes: { list: classes.list },  anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "left"
+          },
+          transformOrigin: {
+            vertical: "top",
+            horizontal: "left"
+          },getContentAnchorEl: null }}
+          className={classes.selectList}
           id={`${id}-day`}
           name="repeat.yearly.on.day"
           aria-label="Repeat yearly on a day"
-          className="form-control"
           value={on.day}
           disabled={!isActive}
           onChange={numericalFieldHandler(handleChange)}
         >
           {range(0, daysInMonth).map((i) => (
-            <option key={i} value={i + 1}>{i + 1}</option>
+            <MenuItem key={i} value={i + 1}>{i + 1}</MenuItem>
           ))}
-        </select>
+        </Select>
       </div>
     </div>
+    </Grid>
+    
   );
 };
 RepeatYearlyOn.propTypes = {

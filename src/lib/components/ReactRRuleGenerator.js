@@ -84,7 +84,6 @@ class ReactRRuleGenerator extends PureComponent {
                   handleChange={this.handleChange}
                   translations={this.props.translations}
                 />
-                <hr />
               </div>
             )
           }
@@ -101,7 +100,6 @@ class ReactRRuleGenerator extends PureComponent {
           {
             !options.hideEnd && (
               <div>
-                <hr />
                 <End
                   id={`${id}-end`}
                   end={end}

@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-indent */
 import React from 'react';
-import {Grid, makeStyles} from '@material-ui/core';
+import {Grid, makeStyles } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import RepeatYearly from './Yearly/index';
 import RepeatMonthly from './Monthly/index';
@@ -10,7 +12,99 @@ import RepeatDaily from './Daily/index';
 import RepeatHourly from './Hourly/index';
 import translateLabel from '../../utils/translateLabel';
 
-
+const useStyles = makeStyles((theme) => ({
+  inputLabel: {
+      color: theme.palette.text.secondary,
+      width:"auto",
+      height:"auto"
+  },
+  inputContainer: {
+      marginLeft:"10px !important",
+      marginTop: "10px !important",
+      display: "flex",
+      alignItems: "center"
+  },
+  formControl: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+  },
+  input: {
+      width: "95%",
+      height: "50px",
+      display: "flex !important",
+      color:"#546e7a !important",
+      border: "1px solid #F0B032 !important",
+      borderRadius: "50px",
+      padding: "15px !important",
+      background: theme.palette.background.input,
+      justifyContent: "center !important",
+      '& .MuiInputBase-root ': {
+          marginTop: 0
+      },
+      '& .MuiFormHelperText-root': {
+          color: "red"
+      }
+  },
+  textArea: {
+      width: "95%",
+      height: "150px",
+      display: "flex !important",
+      color:"#546e7a !important",
+      border: "1px solid #F0B032 !important",
+      borderRadius: "25px",
+      padding: "15px !important",
+      resize:"none",
+      background: theme.palette.background.input,
+      justifyContent: "center !important",
+      '& .MuiInputBase-root ': {
+          marginTop: 0
+      },
+      '& .MuiFormHelperText-root': {
+          color: "red"
+      }
+  },
+  datepicker: {
+      width: "95%",
+      minWidth:"150px",
+      marginLeft:"15px",
+      float:"left",
+      color:"#546e7a !important",
+      height: "50px",
+      display: "flex !important",
+      border: "1px solid #F0B032 !important",
+      borderRadius: "50px",
+      padding: "15px !important",
+      background: theme.palette.background.input,
+      justifyContent: "center !important",
+      '& .MuiInputBase-root ': {
+          marginTop: 0
+      },
+      '& .MuiFormHelperText-root': {
+          color: "red"
+      }
+  },
+  selectList: {
+      width: "100%%",
+      height: "50px",
+      color:"#646464 !important",
+      display: "flex !important",
+      border: "1px solid #F0B032 !important",
+      colod:"#546e7a",
+      borderRadius: "50px",
+      padding: "15px !important",
+      background: theme.palette.background.input,
+      justifyContent: "center !important",
+      
+  },
+  list:{
+      backgroundColor:"#2B2A2A !important"
+  },
+  rruleMenuItem:{
+    color:"646464 !important"
+  }
+  
+  
+}));
 const Repeat = ({
   id,
   repeat: {
@@ -25,39 +119,44 @@ const Repeat = ({
   handleChange,
   translations
 }) => {
+  const classes = useStyles();
   const isOptionAvailable = option => !options.frequency || options.frequency.indexOf(option) !== -1;
   const isOptionSelected = option => frequency === option;
 
   return (
-    <div className="px-3">
-      <div className="form-group row">
-        <div className="col-sm-2 text-sm-right rruleRepeatLabel">
-          <label
-            htmlFor={`${id}-frequency`}
-            className="col-form-label"
-          >
-            <strong>
-              {translateLabel(translations, 'repeat.label')}
-            </strong>
-          </label>
-        </div>
+    <Grid container >
+    <Grid item  direction={'row'} justify={'space-between'} xl={6} md={6} sm={6} xs={6} lg={6} class="rruleContainer">
+       
+        <Typography className={classes.inputLabel} variant={"h5"}>
+        {translateLabel(translations, 'repeat.label')}
+        </Typography>
+          
         <div className="col-sm-6 rruleRepeatSelect">
-          <select
+          <Select 
+            MenuProps={{ classes: { list: classes.list },  anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left"
+            },
+            transformOrigin: {
+              vertical: "top",
+              horizontal: "left"
+            },getContentAnchorEl: null }}
             name="repeat.frequency"
             id={`${id}-frequency`}
-            className="form-control"
             value={frequency}
             onChange={handleChange}
+            className={classes.selectList}
           >
-            {isOptionAvailable('Yearly') && <option value="Yearly">{translateLabel(translations, 'repeat.yearly.label')}</option>}
-            {isOptionAvailable('Monthly') && <option value="Monthly">{translateLabel(translations, 'repeat.monthly.label')}</option>}
-            {isOptionAvailable('Weekly') && <option value="Weekly">{translateLabel(translations, 'repeat.weekly.label')}</option>}
-            {isOptionAvailable('Daily') && <option value="Daily">{translateLabel(translations, 'repeat.daily.label')}</option>}
-            {isOptionAvailable('Hourly') && <option value="Hourly">{translateLabel(translations, 'repeat.hourly.label')}</option>}
-          </select>
-        </div>
-      </div>
+            {isOptionAvailable('Yearly') && <MenuItem classes={classes.rruleMenuItem} value="Yearly">{translateLabel(translations, 'repeat.yearly.label')}</MenuItem>}
+            {isOptionAvailable('Monthly') && <MenuItem classes={classes.rruleMenuItem} value="Monthly">{translateLabel(translations, 'repeat.monthly.label')}</MenuItem>}
+            {isOptionAvailable('Weekly') && <MenuItem classes={classes.rruleMenuItem} value="Weekly">{translateLabel(translations, 'repeat.weekly.label')}</MenuItem>}
+            {isOptionAvailable('Daily') && <MenuItem classes={classes.rruleMenuItem} value="Daily">{translateLabel(translations, 'repeat.daily.label')}</MenuItem>}
+            {isOptionAvailable('Hourly') && <MenuItem classes={classes.rruleMenuItem} value="Hourly">{translateLabel(translations, 'repeat.hourly.label')}</MenuItem>}
+          </Select>
+        
 
+   
+   
       {
         isOptionSelected('Yearly') &&
         <RepeatYearly
@@ -105,6 +204,8 @@ const Repeat = ({
       }
 
     </div>
+    </Grid>
+    </Grid>
   );
 };
 
